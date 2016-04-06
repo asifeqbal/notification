@@ -53,56 +53,39 @@
     <script type="text/javascript" src="PushNotification.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
-	module.run(function($cordovaPush) {
+		document.addEventListener("deviceready",onDeviceReady,false);
+	function onDeviceReady(){
+	console.log("Device Ready")
+	var push = PushNotification.init({ "android": {"senderID": "168738893245"},
+	"ios": {"alert": "true", "badge": "true", "sound": "true"}, "windows": {} } );
 
-  var androidConfig = {
-    "senderID": "480927380414",
-  };
+	push.on('registration', function(data) {
+	console.log(data.registrationId);
+	$("#gcm_id").html(data.registrationId);
+	});
 
-  document.addEventListener("deviceready", function(){
-    $cordovaPush.register(androidConfig).then(function(result) {
-      // Success
-    }, function(err) {
-      // Error
-    })
+	push.on('notification', function(data) {
+	console.log(data.message);
+	alert(data.title+" Message: " +data.message);
+	// data.title,
+	// data.count,
+	// data.sound,
+	// data.image,
+	// data.additionalData
+	});
 
-    $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-      switch(notification.event) {
-        case 'registered':
-          if (notification.regid.length > 0 ) {
-            alert('registration ID = ' + notification.regid);
-          }
-          break;
-
-        case 'message':
-          // this is the actual push notification. its format depends on the data model from the push server
-          alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
-          break;
-
-        case 'error':
-          alert('GCM error = ' + notification.msg);
-          break;
-
-        default:
-          alert('An unknown GCM event has occurred');
-          break;
-      }
-    });
-
-
-    // WARNING: dangerous to unregister (results in loss of tokenID)
-    $cordovaPush.unregister(options).then(function(result) {
-      // Success!
-    }, function(err) {
-      // Error
-    })
-
-  }, false);
-});
-
+	push.on('error', function(e) {
+	console.log(e.message);
+	});
+	}
+	</script>
+	</head>
+	<body>
+	<h1>Push Notification Example</h1>
+	Your GCM ID : <br/>
+	<p id="gcm_id"></p>
+</body>
+</html>
 
        
-    </script>
-</body>
-
-</html>
+    
