@@ -53,31 +53,46 @@
     <script type="text/javascript" src="PushNotification.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
-		document.addEventListener("deviceready",onDeviceReady,false);
-	function onDeviceReady(){
-	console.log("Device Ready")
-	var push = PushNotification.init({ "android": {"senderID": "168738893245"},
-	"ios": {"alert": "true", "badge": "true", "sound": "true"}, "windows": {} } );
+		var pushNotification = window.plugins.pushNotification;
 
-	push.on('registration', function(data) {
-	console.log(data.registrationId);
-	$("#gcm_id").html(data.registrationId);
-	});
+pushNotification.register(
+    successHandler, 
+    errorHandler, 
+    {
+        'senderID':"168738893245",
+        'ecb':'onNotificationGCM' // callback function
+    }
+);
+function successHandler(result) {
+    console.log('Success: '+ result);
+}
+function errorHandler(error) {
+    console.log('Error: '+ error);
+}
+function onNotificationGCM(e) {
+    switch(e.event){
+        case 'registered':
+            if (e.regid.length > 0){
+                deviceRegistered(e.regid);
+            }
+        break;
 
-	push.on('notification', function(data) {
-	console.log(data.message);
-	alert(data.title+" Message: " +data.message);
-	// data.title,
-	// data.count,
-	// data.sound,
-	// data.image,
-	// data.additionalData
-	});
+        case 'message':
+            if (e.foreground){
+            	// When the app is running foreground. 
+                alert('The room temperature is set too high')
+            }
+        break;
 
-	push.on('error', function(e) {
-	console.log(e.message);
-	});
-	}
+        case 'error':
+            console.log('Error: ' + e.msg);
+        break;
+
+        default:
+          console.log('An unknown event was received');
+          break;
+    }
+}
 	</script>
 	</head>
 	<body>

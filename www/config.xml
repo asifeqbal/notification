@@ -25,7 +25,7 @@
     <plugin name="cordova-plugin-globalization" source="npm" spec="&gt;1.0.0" />
     <plugin name="cordova-plugin-inappbrowser" source="npm" spec="&gt;1.0.0" />
     <plugin name="cordova-plugin-media" source="npm" spec="&gt;1.0.0" />
-    <!-- <plugin name="cordova-plugin-network-information" source="npm" spec="&gt;1.0.0" /> -->
+    <plugin name="cordova-plugin-network-information" source="npm" spec="&gt;1.0.0" />
     <plugin name="cordova-plugin-splashscreen" source="npm" spec="&gt;1.0.0" />
     <plugin name="cordova-plugin-statusbar" source="npm" spec="&gt;1.0.0" />
     <plugin name="cordova-plugin-vibration" source="npm" spec="&gt;1.0.0" />
